@@ -1,5 +1,7 @@
 from django.db import models
 
+from django.db.models import Sum
+
 from django.contrib.auth.models import User
 
 
@@ -35,6 +37,15 @@ class Customer(models.Model):
 
     is_active=models.BooleanField(default=True)
 
+    @property
+    def work_count(self):
+        # return self.work_set.all().count()
+        return Work.objects.filter(customer=self).count()
+
+    @property
+    def work_total(self):
+
+        return Work.objects.filter(customer=self).values('amount').aggregate(total=Sum('amount'))['total']
     def __str__(self) -> str:
 
         return self.name
