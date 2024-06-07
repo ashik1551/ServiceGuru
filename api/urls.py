@@ -14,4 +14,6 @@ urlpatterns=[
 
     path('token/',ObtainAuthToken.as_view()),
 
+    path('works/<int:pk>/',views.WorkViewSetView.as_view())
+
 ]+router.urls

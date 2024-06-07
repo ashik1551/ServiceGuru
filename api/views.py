@@ -10,7 +10,9 @@ from rest_framework.response import Response
 
 from rest_framework.decorators import action
 
-from .models import Customer
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
+
+from .models import Customer,Work
 
 
 
@@ -22,7 +24,7 @@ class CustomerViewSetView(ModelViewSet):
 
     authentication_classes=[authentication.TokenAuthentication]
 
-    permission_classes=[permissions.IsAuthenticated]
+    permission_classes=[permissions.IsAdminUser]
     
     def perform_create(self, serializer):
         return serializer.save(technician=self.request.user)
@@ -46,4 +48,14 @@ class CustomerViewSetView(ModelViewSet):
         
         else:
 
-            return Response(data=serializer.data)
+            return Response(data=serializer.errors)
+        
+class WorkViewSetView(RetrieveUpdateDestroyAPIView):
+
+    queryset=Work.objects.all()
+
+    serializer_class=WorkSerializer
+
+    authentication_classes=[authentication.TokenAuthentication]
+
+    permission_classes=[permissions.IsAdminUser]
